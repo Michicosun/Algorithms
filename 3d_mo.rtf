@@ -1,0 +1,525 @@
+{\rtf1\ansi\ansicpg1251\cocoartf1561\cocoasubrtf600
+{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;\f1\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;\red100\green56\blue32;\red255\green255\blue255;\red196\green26\blue22;
+\red170\green13\blue145;\red0\green0\blue0;\red28\green0\blue207;}
+{\*\expandedcolortbl;;\csgenericrgb\c39100\c22000\c12500;\csgenericrgb\c100000\c100000\c100000;\csgenericrgb\c77000\c10200\c8600;
+\csgenericrgb\c66500\c5200\c56900;\csgenericrgb\c0\c0\c0;\csgenericrgb\c11000\c0\c81000;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab543
+\pard\tx543\pardeftab543\pardirnatural\partightenfactor0
+
+\f0\fs22 \cf2 \cb3 #pragma comment(linker, \cf4 "/stack:200000000"\cf2 )
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #pragma GCC optimize(\cf4 "Ofast"\cf2 )
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #pragma GCC target(\cf4 "sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,tune=native"\cf2 )
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #include\cf4 <iostream>
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #include\cf4 <cmath>
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #include\cf4 <algorithm>
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #include\cf4 <vector>
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #include\cf4 <unordered_map>
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #include\cf4 <unordered_set>
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #include\cf4 <map>
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #include\cf4 <algorithm>
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #include\cf4 <queue>
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #include\cf4 <stack>
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #include\cf4 <cstdio>
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #include\cf4 <cassert>
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #include\cf4 <sstream>
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #include\cf4 <set>
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 using\cf6  \cf5 namespace\cf6  std;
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 const\cf6  \cf5 int\cf6  maxSqrt = \cf7 790\cf6 ;
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 int\cf6  d[maxSqrt];
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 void\cf6  change(\cf5 int\cf6  ind, \cf5 int\cf6  x)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 if\cf6 (ind == \cf7 0\cf6  || ind >= maxSqrt)\cf5 return\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     d[ind] += x;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 int\cf6  get()\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 int\cf6  i = \cf7 1\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 for\cf6 (; i < maxSqrt && d[i] > \cf7 0\cf6 ; i++);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 return\cf6  i;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 int\cf6  K;
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 struct\cf6  query1\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 int\cf6  ind, t, l, r;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     query1(\cf5 int\cf6  t = \cf7 0\cf6 , \cf5 int\cf6  l = \cf7 0\cf6 , \cf5 int\cf6  r = \cf7 0\cf6 , \cf5 int\cf6  ind = \cf7 0\cf6 )\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 this\cf6 ->t = t;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 this\cf6 ->l = l;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 this\cf6 ->r = r;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 this\cf6 ->ind = ind;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \};
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 bool\cf6  cmp(\cf5 const\cf6  query1 & a, \cf5 const\cf6  query1 & b)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 return\cf6  a.t / K < b.t / K || (a.t / K == b.t / K && (a.l / K < b.l / K)) || (a.t / K == b.t / K && a.l / K == b.l / K && a.r < b.r);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 struct\cf6  query2\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 int\cf6  ind, from, to;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     query2(\cf5 int\cf6  ind = \cf7 0\cf6 , \cf5 int\cf6  from = \cf7 0\cf6 , \cf5 int\cf6  to = \cf7 0\cf6 )\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 this\cf6 ->ind = ind;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 this\cf6 ->from = from;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 this\cf6 ->to = to;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \};
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 const\cf6  \cf5 int\cf6  maxN = \cf7 1e5\cf6  + \cf7 10\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf5 int\cf6  n, m, tt, tl, tr, t, l, r;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 query2 changes[maxN];
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 query1 queries[maxN];
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf5 int\cf6  cnt[\cf7 2\cf6  * maxN];
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 vector<\cf5 int\cf6 > coords;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf5 int\cf6  a[maxN], aa[maxN], ans[maxN];
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 bool\cf6  in(\cf5 int\cf6  tl, \cf5 int\cf6  tr, query2 & q)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 return\cf6  q.ind >= tl && q.ind <= tr;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 void\cf6  addChange(\cf5 int\cf6  t)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 if\cf6 (t != \cf7 0\cf6 )\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 auto\cf6  ch = changes[t];
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         a[ch.ind] = ch.to;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 if\cf6 (in(l, r, ch))\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             change(cnt[ch.from], -\cf7 1\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             cnt[ch.from]--;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             change(cnt[ch.from], \cf7 1\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             change(cnt[ch.to], -\cf7 1\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             cnt[ch.to]++;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             change(cnt[ch.to], \cf7 1\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 void\cf6  delChange(\cf5 int\cf6  t)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 if\cf6 (t != \cf7 0\cf6 )\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 auto\cf6  ch = changes[t];
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         a[ch.ind] = ch.from;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 if\cf6 (in(l, r, ch))\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             change(cnt[ch.to], -\cf7 1\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             cnt[ch.to]--;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             change(cnt[ch.to], \cf7 1\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             change(cnt[ch.from], -\cf7 1\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             cnt[ch.from]++;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             change(cnt[ch.from], \cf7 1\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 signed\cf6  main()\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     ios_base::sync_with_stdio(\cf7 0\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     cin.tie(\cf7 0\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     cout.tie(\cf7 0\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     cin >> n >> m;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     K = \cf7 800\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 for\cf6 (\cf5 int\cf6  i = \cf7 0\cf6 ; i < n; i++)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         cin >> a[i];
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         coords.push_back(a[i]);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         aa[i] = a[i];
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 int\cf6  timer = \cf7 1\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 int\cf6  indQ = \cf7 0\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 for\cf6 (\cf5 int\cf6  i = \cf7 0\cf6 ; i < m; i++)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 int\cf6  act; cin >> act;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 if\cf6 (act == \cf7 1\cf6 )\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             \cf5 int\cf6  l, r; cin >> l >> r; l--; r--;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             queries[indQ] = query1(timer - \cf7 1\cf6 , l, r, indQ);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             indQ++;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \}\cf5 else\cf6 \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             \cf5 int\cf6  ind, x; cin >> ind >> x; ind--;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             changes[timer] = query2(ind, aa[ind], x);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             aa[ind] = x;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             coords.push_back(x);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             timer++;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     sort(queries, queries + indQ, cmp);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     sort(coords.begin(), coords.end());
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     coords.erase(unique(coords.begin(), coords.end()), coords.end());
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 for\cf6 (\cf5 int\cf6  i = \cf7 0\cf6 ; i < n; i++)a[i] = (\cf5 int\cf6 )(lower_bound(coords.begin(), coords.end(), a[i]) - coords.begin());
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 for\cf6 (\cf5 int\cf6  i = \cf7 1\cf6 ; i < timer; i++)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         changes[i].from = (\cf5 int\cf6 )(lower_bound(coords.begin(), coords.end(), changes[i].from) - coords.begin());
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         changes[i].to = (\cf5 int\cf6 )(lower_bound(coords.begin(), coords.end(), changes[i].to) - coords.begin());
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     t = \cf7 0\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     l = \cf7 0\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     r = n - \cf7 1\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 for\cf6 (\cf5 int\cf6  i = \cf7 0\cf6 ; i < n; i++)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         change(cnt[a[i]], -\cf7 1\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         cnt[a[i]]++;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         change(cnt[a[i]], \cf7 1\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 for\cf6 (\cf5 int\cf6  i = \cf7 0\cf6 ; i < indQ; i++)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 auto\cf6  q = queries[i];
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         tt = q.t;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         tl = q.l;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         tr = q.r;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 while\cf6 (t < tt)addChange(++t);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 while\cf6 (t > tt)delChange(t--);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 while\cf6 (r < tr)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             r++;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             change(cnt[a[r]], -\cf7 1\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             cnt[a[r]]++;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             change(cnt[a[r]], \cf7 1\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 while\cf6 (l > tl)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             l--;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             change(cnt[a[l]], -\cf7 1\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             cnt[a[l]]++;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             change(cnt[a[l]], \cf7 1\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 while\cf6 (r > tr)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             change(cnt[a[r]], -\cf7 1\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             cnt[a[r]]--;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             change(cnt[a[r]], \cf7 1\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             r--;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 while\cf6 (l < tl)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             change(cnt[a[l]], -\cf7 1\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             cnt[a[l]]--;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             change(cnt[a[l]], \cf7 1\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             l++;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         ans[q.ind] = get();
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 for\cf6 (\cf5 int\cf6  i = \cf7 0\cf6 ; i < indQ; i++)cout << ans[i] << \cf4 "\\n"\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 return\cf6  \cf7 0\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+}

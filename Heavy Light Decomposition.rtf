@@ -1,0 +1,519 @@
+{\rtf1\ansi\ansicpg1251\cocoartf1561\cocoasubrtf600
+{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;\f1\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;\red100\green56\blue32;\red255\green255\blue255;\red196\green26\blue22;
+\red170\green13\blue145;\red0\green0\blue0;\red28\green0\blue207;\red92\green38\blue153;\red63\green110\blue116;
+\red46\green13\blue110;\red38\green71\blue75;}
+{\*\expandedcolortbl;;\csgenericrgb\c39100\c22000\c12500;\csgenericrgb\c100000\c100000\c100000;\csgenericrgb\c77000\c10200\c8600;
+\csgenericrgb\c66500\c5200\c56900;\csgenericrgb\c0\c0\c0;\csgenericrgb\c11000\c0\c81000;\csgenericrgb\c35900\c14900\c60100;\csgenericrgb\c24700\c43100\c45600;
+\csgenericrgb\c18100\c5200\c43100;\csgenericrgb\c14900\c27800\c29400;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab543
+\pard\tx543\pardeftab543\pardirnatural\partightenfactor0
+
+\f0\fs22 \cf2 \cb3 #include \cf4 <iostream>
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #include \cf4 <vector>
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #include \cf4 <algorithm>
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #include \cf4 <map>
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #include \cf4 <set>
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf2 #define int long long int
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 using\cf6  \cf5 namespace\cf6  std;
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 const\cf6  \cf5 int\cf6  maxLog = \cf7 30\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf5 int\cf6  timer = \cf7 0\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 vector<vector<\cf5 int\cf6 >> g;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 vector<\cf5 int\cf6 > sz;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 vector<\cf5 int\cf6 > tin;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf8 vector\cf6 <\cf5 int\cf6 > GetRoot;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf8 vector\cf6 <\cf5 int\cf6 > levels;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf8 vector\cf6 <\cf5 int\cf6 > a;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf8 vector\cf6 <\cf8 vector\cf6 <\cf5 int\cf6 >> dp;
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 struct\cf6  SegmentTree\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf5 private\cf6 :
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf8 vector\cf6 <\cf5 int\cf6 > tree;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 void\cf6  build(\cf5 int\cf6  v, \cf5 int\cf6  tl, \cf5 int\cf6  tr, \cf5 const\cf6  \cf8 vector\cf6 <\cf5 int\cf6 > & a)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 if\cf6 (tr - tl == \cf7 1\cf6 )\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             \cf9 tree\cf6 [\cf10 v\cf6 ] = a[\cf10 tl\cf6 ];
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \}\cf5 else\cf6 \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             \cf5 int\cf6  mid = (tl + tr) / \cf7 2\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             \cf11 build\cf6 (\cf7 2\cf6  * v + \cf7 1\cf6 , tl, mid, a);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             \cf11 build\cf6 (\cf7 2\cf6  * v + \cf7 2\cf6 , mid, tr, a);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             \cf9 tree\cf6 [\cf10 v\cf6 ] = \cf10 max\cf6 (\cf9 tree\cf6 [\cf7 2\cf6  * \cf10 v\cf6  + \cf7 1\cf6 ], \cf9 tree\cf6 [\cf7 2\cf6  * \cf10 v\cf6  + \cf7 2\cf6 ]);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 int\cf6  query1(\cf5 int\cf6  L, \cf5 int\cf6  R, \cf5 int\cf6  v, \cf5 int\cf6  tl, \cf5 int\cf6  tr)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 if\cf6 (tr <= L || tl >= R || tr - tl < \cf7 1\cf6 )\cf5 return\cf6  -\cf7 1e9\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 else\cf6  \cf5 if\cf6 (L <= tl && tr <= R)\cf5 return\cf6  \cf9 tree\cf6 [\cf10 v\cf6 ];
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 else\cf6 \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             \cf5 int\cf6  mid = (tl + tr) / \cf7 2\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             \cf5 auto\cf6  left = \cf11 query1\cf6 (L, R, \cf7 2\cf6  * v + \cf7 1\cf6 , tl, mid);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             \cf5 auto\cf6  right = \cf11 query1\cf6 (L, R, \cf7 2\cf6  * v + \cf7 2\cf6 , mid, tr);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             \cf5 return\cf6  \cf10 max\cf6 (left, right);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 void\cf6  query2(\cf5 int\cf6  ind, \cf5 int\cf6  val, \cf5 int\cf6  v, \cf5 int\cf6  tl, \cf5 int\cf6  tr)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 if\cf6 (tl > ind || tr <= ind || tr - tl < \cf7 1\cf6 )\cf5 return\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 else\cf6  \cf5 if\cf6 (tr - tl == \cf7 1\cf6 )\cf9 tree\cf6 [\cf10 v\cf6 ] = val;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 else\cf6 \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             \cf5 int\cf6  mid = (tl + tr) / \cf7 2\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             \cf5 if\cf6 (ind >= mid)\cf11 query2\cf6 (ind, val, \cf7 2\cf6  * v + \cf7 2\cf6 , mid, tr);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             \cf5 else\cf6  \cf11 query2\cf6 (ind, val, \cf7 2\cf6  * v + \cf7 1\cf6 , tl, mid);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             \cf9 tree\cf6 [\cf10 v\cf6 ] = \cf10 max\cf6 (\cf9 tree\cf6 [\cf7 2\cf6  * \cf10 v\cf6  + \cf7 1\cf6 ], \cf9 tree\cf6 [\cf7 2\cf6  * \cf10 v\cf6  + \cf7 2\cf6 ]);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf5 public\cf6 :
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     SegmentTree(\cf5 const\cf6  \cf8 vector\cf6 <\cf5 int\cf6 > & a)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf9 tree\cf6 .\cf10 resize\cf6 (\cf7 4\cf6  * a.\cf10 size\cf6 ());
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf11 build\cf6 (\cf7 0\cf6 , \cf7 0\cf6 , a.\cf10 size\cf6 (), a);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 int\cf6  getMax(\cf5 int\cf6  L, \cf5 int\cf6  R)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 return\cf6  \cf11 query1\cf6 (L, R, \cf7 0\cf6 , \cf7 0\cf6 , \cf9 a\cf6 .\cf10 size\cf6 ());
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 void\cf6  change(\cf5 int\cf6  ind, \cf5 int\cf6  val)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf11 query2\cf6 (ind, val, \cf7 0\cf6 , \cf7 0\cf6 , \cf9 a\cf6 .\cf10 size\cf6 ());
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \};
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 void\cf6  get_size(\cf5 int\cf6  v = \cf7 0\cf6 , \cf5 int\cf6  p = \cf7 0\cf6 )\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf9 sz\cf6 [\cf10 v\cf6 ] = \cf7 1\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 int\cf6  maxSizeInd = -\cf7 1\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 int\cf6  pos = -\cf7 1\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 for\cf6 (\cf5 auto\cf6  to : \cf9 g\cf6 [\cf10 v\cf6 ])\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         pos++;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 if\cf6 (to == p)\cf5 continue\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf11 get_size\cf6 (to, v);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf9 sz\cf6 [\cf10 v\cf6 ] += \cf9 sz\cf6 [\cf10 to\cf6 ];
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 if\cf6 (maxSizeInd == -\cf7 1\cf6  || \cf9 sz\cf6 [\cf10 to\cf6 ] > \cf9 sz\cf6 [\cf10 g\cf6 [\cf10 v\cf6 ][\cf10 maxSizeInd\cf6 ]]) \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             maxSizeInd = pos;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 if\cf6 (maxSizeInd > -\cf7 1\cf6 )\cf10 swap\cf6 (\cf9 g\cf6 [\cf10 v\cf6 ][\cf7 0\cf6 ], \cf9 g\cf6 [\cf10 v\cf6 ][\cf10 maxSizeInd\cf6 ]);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 void\cf6  hld(\cf5 int\cf6  v = \cf7 0\cf6 , \cf5 int\cf6  p = \cf7 0\cf6 , \cf5 int\cf6  root = -\cf7 1\cf6 )\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf9 tin\cf6 [\cf10 v\cf6 ] = \cf9 timer\cf6 ++;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf9 a\cf6 .\cf10 push_back\cf6 (\cf9 levels\cf6 [\cf10 v\cf6 ]);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf9 dp\cf6 [\cf10 v\cf6 ][\cf7 0\cf6 ] = p;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 if\cf6 (root == -\cf7 1\cf6 )root = v;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf9 GetRoot\cf6 [\cf10 v\cf6 ] = root;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 bool\cf6  continuePath = \cf5 true\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 for\cf6 (\cf5 auto\cf6  to : \cf9 g\cf6 [\cf10 v\cf6 ]) \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 if\cf6 (to == p)\cf5 continue\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 if\cf6 (continuePath)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             \cf11 hld\cf6 (to, v, root);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             continuePath = \cf5 false\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \}\cf5 else\cf6  \cf11 hld\cf6 (to, v);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 int\cf6  isParent(\cf5 int\cf6  a, \cf5 int\cf6  b) \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 return\cf6  \cf9 tin\cf6 [\cf10 a\cf6 ] <= \cf9 tin\cf6 [\cf10 b\cf6 ] && \cf9 tin\cf6 [\cf10 b\cf6 ] <= \cf9 tin\cf6 [\cf10 a\cf6 ] + \cf9 sz\cf6 [\cf10 a\cf6 ] - \cf7 1\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 int\cf6  LCA(\cf5 int\cf6  a, \cf5 int\cf6  b)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 if\cf6 (\cf11 isParent\cf6 (a, b))\cf5 return\cf6  a;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 if\cf6 (\cf11 isParent\cf6 (b, a))\cf5 return\cf6  b;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 for\cf6 (\cf5 int\cf6  p = \cf9 maxLog\cf6  - \cf7 1\cf6 ; p >= \cf7 0\cf6 ; p--)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 if\cf6 (!\cf11 isParent\cf6 (\cf9 dp\cf6 [\cf10 a\cf6 ][\cf10 p\cf6 ], b))\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             a = \cf9 dp\cf6 [\cf10 a\cf6 ][\cf10 p\cf6 ];
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 return\cf6  \cf9 dp\cf6 [\cf10 a\cf6 ][\cf7 0\cf6 ];
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 void\cf6  init(\cf5 int\cf6  n)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf9 g\cf6 .\cf10 resize\cf6 (n);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf9 sz\cf6 .\cf10 resize\cf6 (n);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf9 tin\cf6 .\cf10 resize\cf6 (n);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf9 GetRoot\cf6 .\cf10 resize\cf6 (n);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf9 levels\cf6 .\cf10 resize\cf6 (n);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf9 dp\cf6 .\cf10 resize\cf6 (n, \cf8 vector\cf6 <\cf5 int\cf6 >(\cf9 maxLog\cf6 ));
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 void\cf6  PreProcess(\cf5 int\cf6  n)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf11 get_size\cf6 ();
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf11 hld\cf6 ();
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 for\cf6 (\cf5 int\cf6  p = \cf7 1\cf6 ; p < \cf9 maxLog\cf6 ; p++)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 for\cf6 (\cf5 int\cf6  v = \cf7 0\cf6 ; v < n; v++)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             \cf9 dp\cf6 [\cf10 v\cf6 ][\cf10 p\cf6 ] = \cf9 dp\cf6 [\cf10 dp\cf6 [\cf10 v\cf6 ][\cf10 p\cf6  - \cf7 1\cf6 ]][\cf10 p\cf6  - \cf7 1\cf6 ];
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 int\cf6  getAns(\cf5 int\cf6  u, \cf5 int\cf6  v, \cf9 SegmentTree\cf6  & tree)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 int\cf6  w = \cf11 LCA\cf6 (u, v);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 int\cf6  ans = \cf7 0\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 while\cf6 (!\cf11 isParent\cf6 (\cf9 GetRoot\cf6 [\cf10 u\cf6 ], w))\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         ans = \cf10 max\cf6 (ans, tree.\cf11 getMax\cf6 (\cf9 tin\cf6 [\cf10 GetRoot\cf6 [\cf10 u\cf6 ]], \cf9 tin\cf6 [\cf10 u\cf6 ] + \cf7 1\cf6 ));
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         u = \cf9 dp\cf6 [\cf10 GetRoot\cf6 [\cf10 u\cf6 ]][\cf7 0\cf6 ];
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     ans = \cf10 max\cf6 (ans, tree.\cf11 getMax\cf6 (\cf9 tin\cf6 [\cf10 w\cf6 ], \cf9 tin\cf6 [\cf10 u\cf6 ] + \cf7 1\cf6 ));
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 while\cf6 (!\cf11 isParent\cf6 (\cf9 GetRoot\cf6 [\cf10 v\cf6 ], w))\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         ans = \cf10 max\cf6 (ans, tree.\cf11 getMax\cf6 (\cf9 tin\cf6 [\cf10 GetRoot\cf6 [\cf10 v\cf6 ]], \cf9 tin\cf6 [\cf10 v\cf6 ] + \cf7 1\cf6 ));
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         v = \cf9 dp\cf6 [\cf10 GetRoot\cf6 [\cf10 v\cf6 ]][\cf7 0\cf6 ];
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     ans = \cf10 max\cf6 (ans, tree.\cf11 getMax\cf6 (\cf9 tin\cf6 [\cf10 w\cf6 ], \cf9 tin\cf6 [\cf10 v\cf6 ] + \cf7 1\cf6 ));
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 return\cf6  ans;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 signed\cf6  main()\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 int\cf6  n; \cf8 cin\cf6  >> n;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf11 init\cf6 (n);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 for\cf6 (\cf5 int\cf6  i = \cf7 0\cf6 ; i < n; i++)\cf8 cin\cf6  >> \cf9 levels\cf6 [\cf10 i\cf6 ];
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 for\cf6 (\cf5 int\cf6  i = \cf7 1\cf6 ; i < n; i++)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 int\cf6  u, v; \cf8 cin\cf6  >> u >> v; u--; v--;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf9 g\cf6 [\cf10 u\cf6 ].\cf10 push_back\cf6 (v);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf9 g\cf6 [\cf10 v\cf6 ].\cf10 push_back\cf6 (u);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf11 PreProcess\cf6 (n);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf9 SegmentTree\cf6  tree(\cf9 a\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 int\cf6  k; \cf8 cin\cf6  >> k;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 for\cf6 (\cf5 int\cf6  i = \cf7 0\cf6 ; i < k; i++)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 char\cf6  c;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 int\cf6  l, r;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf8 cin\cf6  >> c >> l >> r;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 if\cf6 (c == \cf7 '?'\cf6 )\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             \cf8 cout\cf6  << \cf11 getAns\cf6 (l - \cf7 1\cf6 , r - \cf7 1\cf6 , tree) << \cf10 endl\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \}\cf5 else\cf6 \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             tree.\cf11 change\cf6 (\cf9 tin\cf6 [\cf10 l\cf6  - \cf7 1\cf6 ], r);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 return\cf6  \cf7 0\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+}

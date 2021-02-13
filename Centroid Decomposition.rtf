@@ -1,0 +1,388 @@
+{\rtf1\ansi\ansicpg1251\cocoartf1561\cocoasubrtf600
+{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;\f1\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;\red100\green56\blue32;\red255\green255\blue255;\red196\green26\blue22;
+\red170\green13\blue145;\red0\green0\blue0;\red92\green38\blue153;\red28\green0\blue207;\red63\green110\blue116;
+\red46\green13\blue110;\red38\green71\blue75;}
+{\*\expandedcolortbl;;\csgenericrgb\c39100\c22000\c12500;\csgenericrgb\c100000\c100000\c100000;\csgenericrgb\c77000\c10200\c8600;
+\csgenericrgb\c66500\c5200\c56900;\csgenericrgb\c0\c0\c0;\csgenericrgb\c35900\c14900\c60100;\csgenericrgb\c11000\c0\c81000;\csgenericrgb\c24700\c43100\c45600;
+\csgenericrgb\c18100\c5200\c43100;\csgenericrgb\c14900\c27800\c29400;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab543
+\pard\tx543\pardeftab543\pardirnatural\partightenfactor0
+
+\f0\fs22 \cf2 \cb3 #include \cf4 <iostream>
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #include \cf4 <cmath>
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #include \cf4 <algorithm>
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #include \cf4 <vector>
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #include \cf4 <bitset>
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #include \cf4 <unordered_map>
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #include \cf4 <set>
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #include \cf4 <stack>
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 using\cf6  \cf5 namespace\cf6  \cf7 std\cf6 ;
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 int\cf6  n;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf7 vector\cf6 <\cf5 int\cf6 > sz;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf7 vector\cf6 <\cf7 vector\cf6 <\cf7 pair\cf6 <\cf5 int\cf6 , \cf5 int\cf6 >>> g;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf7 vector\cf6 <\cf7 vector\cf6 <\cf5 int\cf6 >> len;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf7 vector\cf6 <\cf5 int\cf6 > depth;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf7 vector\cf6 <\cf5 int\cf6 > pr;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf7 vector\cf6 <\cf7 multiset\cf6 <\cf5 int\cf6 >> cAns;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf5 const\cf6  \cf5 int\cf6  INF = \cf8 1e9\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf5 const\cf6  \cf5 int\cf6  maxlog = \cf8 30\cf6 ;
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 void\cf6  dfs(\cf5 int\cf6  v, \cf5 int\cf6  p = -\cf8 1\cf6 )\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf9 sz\cf6 [\cf10 v\cf6 ] = \cf8 1\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 for\cf6  (\cf5 auto\cf6  t : \cf9 g\cf6 [\cf10 v\cf6 ])\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 int\cf6  to = t.\cf7 first\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 if\cf6  (to != p && \cf9 depth\cf6 [\cf10 to\cf6 ] == -\cf8 1\cf6 )\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             \cf11 dfs\cf6 (to, v);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             \cf9 sz\cf6 [\cf10 v\cf6 ] += \cf9 sz\cf6 [\cf10 to\cf6 ];
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 void\cf6  getLen(\cf5 int\cf6  v, \cf5 int\cf6  p, \cf5 int\cf6  d, \cf5 int\cf6  l)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf9 len\cf6 [\cf10 v\cf6 ][\cf10 d\cf6 ] = l;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 for\cf6  (\cf5 auto\cf6  t : \cf9 g\cf6 [\cf10 v\cf6 ])\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 int\cf6  to = t.\cf7 first\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 int\cf6  w = t.\cf7 second\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 if\cf6  (to != p && \cf9 depth\cf6 [\cf10 to\cf6 ] == -\cf8 1\cf6 )\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             \cf11 getLen\cf6 (to, v, d, l + w);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 int\cf6  build(\cf5 int\cf6  v, \cf5 int\cf6  d)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf11 dfs\cf6 (v);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 int\cf6  s = \cf9 sz\cf6 [\cf10 v\cf6 ];
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 int\cf6  prev = -\cf8 1\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 while\cf6  (\cf5 true\cf6 )\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 int\cf6  next = -\cf8 1\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 for\cf6  (\cf5 auto\cf6  t : \cf9 g\cf6 [\cf10 v\cf6 ])\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             \cf5 int\cf6  to = t.\cf7 first\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             \cf5 if\cf6  (\cf9 sz\cf6 [\cf10 to\cf6 ] > s / \cf8 2\cf6  && \cf9 depth\cf6 [\cf10 to\cf6 ] == -\cf8 1\cf6  && prev != to)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6                 next = to;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 if\cf6  (next == -\cf8 1\cf6 )\cf5 break\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         prev = v;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         v = next;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf9 depth\cf6 [\cf10 v\cf6 ] = d;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf11 getLen\cf6 (v, -\cf8 1\cf6 , d, \cf8 0\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 for\cf6  (\cf5 auto\cf6  t : \cf9 g\cf6 [\cf10 v\cf6 ])\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 int\cf6  to = t.\cf7 first\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 if\cf6  (\cf9 depth\cf6 [\cf10 to\cf6 ] == -\cf8 1\cf6 )\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             \cf9 pr\cf6 [\cf10 build\cf6 (\cf10 to\cf6 , \cf10 d\cf6  + \cf8 1\cf6 )] = v;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 return\cf6  v;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 void\cf6  init()\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf9 sz\cf6 .\cf10 resize\cf6 (\cf9 n\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf9 g\cf6 .\cf10 resize\cf6 (\cf9 n\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf9 pr\cf6 .\cf10 resize\cf6 (\cf9 n\cf6 , -\cf8 1\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf9 cAns\cf6 .\cf10 resize\cf6 (\cf9 n\cf6 , \{\cf9 INF\cf6 \});
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf9 depth\cf6 .\cf10 resize\cf6 (\cf9 n\cf6 , -\cf8 1\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf9 len\cf6 .\cf10 resize\cf6 (\cf9 n\cf6 , \cf7 vector\cf6 <\cf5 int\cf6 >(\cf9 maxlog\cf6 , \cf8 1e9\cf6 ));
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 void\cf6  add(\cf5 int\cf6  v)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 int\cf6  c = v;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 int\cf6  d = \cf9 depth\cf6 [\cf10 v\cf6 ];
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 while\cf6  (c != -\cf8 1\cf6 )\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf9 cAns\cf6 [\cf10 c\cf6 ].\cf10 insert\cf6 (\cf9 len\cf6 [\cf10 v\cf6 ][\cf10 d\cf6 ]);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         c = \cf9 pr\cf6 [\cf10 c\cf6 ];
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         d--;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 int\cf6  get(\cf5 int\cf6  v)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 int\cf6  c = v;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 int\cf6  ans = \cf8 1e9\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 int\cf6  d = \cf9 depth\cf6 [\cf10 v\cf6 ];
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 while\cf6  (c != -\cf8 1\cf6 )\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 int\cf6  minC = (*\cf9 cAns\cf6 [\cf10 c\cf6 ].\cf10 begin\cf6 ());
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         ans = \cf10 min\cf6 (ans, minC + \cf9 len\cf6 [\cf10 v\cf6 ][\cf10 d\cf6 ]);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         c = \cf9 pr\cf6 [\cf10 c\cf6 ];
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         d--;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 return\cf6  ans;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 void\cf6  del(\cf5 int\cf6  v)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 int\cf6  c = v;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 int\cf6  d = \cf9 depth\cf6 [\cf10 v\cf6 ];
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 while\cf6  (c != -\cf8 1\cf6 )\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf9 cAns\cf6 [\cf10 c\cf6 ].\cf10 erase\cf6 (\cf9 cAns\cf6 [\cf10 c\cf6 ].\cf10 find\cf6 (\cf9 len\cf6 [\cf10 v\cf6 ][\cf10 d\cf6 ]));
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         c = \cf9 pr\cf6 [\cf10 c\cf6 ];
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         d--;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 signed\cf6  main()\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf7 cin\cf6  >> \cf9 n\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf11 init\cf6 ();
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 for\cf6  (\cf5 int\cf6  i = \cf8 1\cf6 ; i < \cf9 n\cf6 ; i++)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 int\cf6  u, v, l; \cf7 cin\cf6  >> u >> v >> l; u--; v--;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf9 g\cf6 [\cf10 u\cf6 ].\cf10 push_back\cf6 (\{v, l\});
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf9 g\cf6 [\cf10 v\cf6 ].\cf10 push_back\cf6 (\{u, l\});
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf11 build\cf6 (\cf8 0\cf6 , \cf8 0\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 int\cf6  m; \cf7 cin\cf6  >> m;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf11 add\cf6 (\cf8 0\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 for\cf6  (\cf5 int\cf6  i = \cf8 0\cf6 ; i < m; i++)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 char\cf6  c;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 int\cf6  v; \cf7 cin\cf6  >> c >> v; v--;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 if\cf6  (c == \cf8 '+'\cf6 )\cf11 add\cf6 (v);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 else\cf6  \cf5 if\cf6  (c == \cf8 '-'\cf6 )\cf11 del\cf6 (v);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 else\cf6  \cf7 cout\cf6  << \cf11 get\cf6 (v) << \cf10 endl\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 return\cf6  \cf8 0\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+}

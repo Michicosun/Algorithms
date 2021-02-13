@@ -1,0 +1,315 @@
+{\rtf1\ansi\ansicpg1251\cocoartf1561\cocoasubrtf600
+{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;\f1\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;\red170\green13\blue145;\red255\green255\blue255;\red0\green0\blue0;
+\red28\green0\blue207;\red38\green71\blue75;\red63\green110\blue116;\red46\green13\blue110;\red92\green38\blue153;
+}
+{\*\expandedcolortbl;;\csgenericrgb\c66500\c5200\c56900;\csgenericrgb\c100000\c100000\c100000;\csgenericrgb\c0\c0\c0;
+\csgenericrgb\c11000\c0\c81000;\csgenericrgb\c14900\c27800\c29400;\csgenericrgb\c24700\c43100\c45600;\csgenericrgb\c18100\c5200\c43100;\csgenericrgb\c35900\c14900\c60100;
+}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab543
+\pard\tx543\pardeftab543\pardirnatural\partightenfactor0
+
+\f0\fs22 \cf2 \cb3 class\cf4  Mint\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 private\cf4 :
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \cf2 int\cf4  x;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \cf2 inline\cf4  \cf2 static\cf4  \cf2 int\cf4  mod = \cf5 1e9\cf4  + \cf5 9\cf4 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \cf2 int\cf4  fastPow(\cf2 int\cf4  x, \cf2 int\cf4  p) \cf2 const\cf4  \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4         \cf2 if\cf4  (p == \cf5 0\cf4 ) \cf2 return\cf4  \cf5 1\cf4 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4         \cf2 else\cf4  \cf2 if\cf4  (p % \cf5 2\cf4  == \cf5 0\cf4 ) \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4             \cf2 auto\cf4  ans = \cf6 fastPow\cf4 (x, p / \cf5 2\cf4 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4             \cf2 return\cf4  ans * ans % \cf7 mod\cf4 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4         \} \cf2 else\cf4  \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4             \cf2 auto\cf4  ans = \cf6 fastPow\cf4 (x, p - \cf5 1\cf4 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4             \cf2 return\cf4  ans * x % \cf7 mod\cf4 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4         \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 public\cf4 :
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     Mint() : \cf7 x\cf4 (\cf5 0\cf4 ) \{\}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     Mint(\cf2 int\cf4  x) : \cf7 x\cf4 (x % \cf7 mod\cf4 ) \{\}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     Mint(\cf2 const\cf4  \cf7 Mint\cf4 & other) \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4         \cf2 this\cf4 ->\cf7 x\cf4  = other.\cf7 x\cf4 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4         \cf2 this\cf4 ->\cf7 mod\cf4  = other.\cf7 mod\cf4 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     Mint(\cf7 Mint\cf4 && other) \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4         \cf8 swap\cf4 (\cf2 this\cf4 ->\cf7 x\cf4 , other.\cf7 x\cf4 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4         \cf8 swap\cf4 (\cf2 this\cf4 ->\cf7 mod\cf4 , other.\cf7 mod\cf4 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \cf2 int\cf4  getX() \cf2 const\cf4  \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4         \cf2 return\cf4  \cf7 x\cf4 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \cf2 int\cf4  getM() \cf2 const\cf4  \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4         \cf2 return\cf4  \cf7 mod\cf4 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \cf2 int\cf4  rev() \cf2 const\cf4  \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4         \cf2 return\cf4  \cf6 fastPow\cf4 (\cf7 x\cf4 , \cf7 mod\cf4  - \cf5 2\cf4 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \cf7 Mint\cf4  \cf2 operator\cf4 = (\cf2 const\cf4  \cf7 Mint\cf4 & other) \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4         \cf2 this\cf4 ->\cf7 x\cf4  = other.\cf7 x\cf4 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4         \cf2 return\cf4  *\cf2 this\cf4 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \cf7 Mint\cf4  \cf2 operator\cf4 = (\cf7 Mint\cf4 && other) \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4         \cf8 swap\cf4 (\cf7 x\cf4 , other.\cf7 x\cf4 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4         \cf2 return\cf4  *\cf2 this\cf4 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \cf7 Mint\cf4  \cf2 operator\cf4 + (\cf2 const\cf4  \cf7 Mint\cf4 & other) \cf2 const\cf4  \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4         \cf2 int\cf4  nx = (\cf7 x\cf4  + other.\cf7 x\cf4  + \cf7 mod\cf4 ) % \cf7 mod\cf4 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4         \cf2 return\cf4  \cf7 Mint\cf4 (nx);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \cf7 Mint\cf4  \cf2 operator\cf4 - (\cf2 const\cf4  \cf7 Mint\cf4 & other) \cf2 const\cf4  \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4         \cf2 int\cf4  nx = (\cf7 x\cf4  - other.\cf7 x\cf4  + \cf7 mod\cf4 ) % \cf7 mod\cf4 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4         \cf2 return\cf4  \cf7 Mint\cf4 (nx);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \cf7 Mint\cf4  \cf2 operator\cf4 * (\cf2 const\cf4  \cf7 Mint\cf4 & other) \cf2 const\cf4  \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4         \cf2 int\cf4  nx = (\cf7 x\cf4  * other.\cf7 x\cf4 ) % \cf7 mod\cf4 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4         \cf2 return\cf4  \cf7 Mint\cf4 (nx);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \cf7 Mint\cf4  \cf2 operator\cf4 / (\cf2 const\cf4  \cf7 Mint\cf4 & other) \cf2 const\cf4  \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4         \cf2 int\cf4  nx = (\cf7 x\cf4  * other.\cf6 rev\cf4 ()) % \cf7 mod\cf4 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4         \cf2 return\cf4  \cf7 Mint\cf4 (nx);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \cf2 void\cf4  \cf2 operator\cf4 += (\cf2 const\cf4  \cf7 Mint\cf4 & other) \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4         *\cf2 this\cf4  = *\cf2 this\cf4  + other;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \cf2 void\cf4  \cf2 operator\cf4 -= (\cf2 const\cf4  \cf7 Mint\cf4 & other) \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4         *\cf2 this\cf4  = *\cf2 this\cf4  - other;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \cf2 void\cf4  \cf2 operator\cf4 *= (\cf2 const\cf4  \cf7 Mint\cf4 & other) \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4         *\cf2 this\cf4  = *\cf2 this\cf4  * other;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \cf2 void\cf4  \cf2 operator\cf4 /= (\cf2 const\cf4  \cf7 Mint\cf4 & other) \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4         *\cf2 this\cf4  = *\cf2 this\cf4  / other;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \cf2 bool\cf4  \cf2 operator\cf4 == (\cf2 const\cf4  \cf7 Mint\cf4 & other) \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4         \cf2 return\cf4  \cf7 x\cf4  == other.\cf7 x\cf4 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \cf2 bool\cf4  \cf2 operator\cf4 != (\cf2 const\cf4  \cf7 Mint\cf4 & other) \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4         \cf2 return\cf4  \cf7 x\cf4  != other.\cf7 x\cf4 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \cf2 friend\cf4  \cf9 istream\cf4 & \cf2 operator\cf4 >> (\cf9 istream\cf4 & in, \cf7 Mint\cf4 & a) \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4         \cf2 int\cf4  nx; in >> nx;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4         a = nx;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4         \cf2 return\cf4  in;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4 \};
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf9 ostream\cf4 & \cf2 operator\cf4 << (\cf9 ostream\cf4 & out, \cf2 const\cf4  \cf7 Mint\cf4 & a) \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \cf2 return\cf4  out << a.\cf6 getX\cf4 ();
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf7 Mint\cf4  \cf2 operator\cf4 + (\cf2 int\cf4  A, \cf2 const\cf4  \cf7 Mint\cf4 & B) \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \cf2 int\cf4  nx = (A + B.\cf6 getX\cf4 () + B.\cf6 getM\cf4 ()) % B.\cf6 getM\cf4 ();
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \cf2 return\cf4  \cf7 Mint\cf4 (nx);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4 \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf7 Mint\cf4  \cf2 operator\cf4 - (\cf2 int\cf4  A, \cf2 const\cf4  \cf7 Mint\cf4 & B) \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \cf2 int\cf4  nx = (A - B.\cf6 getX\cf4 () + B.\cf6 getM\cf4 ()) % B.\cf6 getM\cf4 ();
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \cf2 return\cf4  \cf7 Mint\cf4 (nx);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4 \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf7 Mint\cf4  \cf2 operator\cf4 * (\cf2 int\cf4  A, \cf2 const\cf4  \cf7 Mint\cf4 & B) \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \cf2 int\cf4  nx = (A * B.\cf6 getX\cf4 ()) % B.\cf6 getM\cf4 ();
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \cf2 return\cf4  \cf7 Mint\cf4 (nx);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4 \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf7 Mint\cf4  \cf2 operator\cf4 / (\cf2 int\cf4  A, \cf2 const\cf4  \cf7 Mint\cf4 & B) \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \cf2 int\cf4  nx = (A * B.\cf6 rev\cf4 ()) % B.\cf6 getM\cf4 ();
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4     \cf2 return\cf4  \cf7 Mint\cf4 (nx);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf4 \}}

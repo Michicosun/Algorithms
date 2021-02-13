@@ -1,0 +1,410 @@
+{\rtf1\ansi\ansicpg1251\cocoartf1561\cocoasubrtf600
+{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;\f1\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;\red100\green56\blue32;\red255\green255\blue255;\red196\green26\blue22;
+\red170\green13\blue145;\red0\green0\blue0;\red28\green0\blue207;}
+{\*\expandedcolortbl;;\csgenericrgb\c39100\c22000\c12500;\csgenericrgb\c100000\c100000\c100000;\csgenericrgb\c77000\c10200\c8600;
+\csgenericrgb\c66500\c5200\c56900;\csgenericrgb\c0\c0\c0;\csgenericrgb\c11000\c0\c81000;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab543
+\pard\tx543\pardeftab543\pardirnatural\partightenfactor0
+
+\f0\fs22 \cf2 \cb3 #include\cf4 <iostream>
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #include\cf4 <cmath>
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #include\cf4 <algorithm>
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #include\cf4 <vector>
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #include\cf4 <deque>
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 using\cf6  \cf5 namespace\cf6  std;
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 const\cf6  \cf5 double\cf6  PI = atan2(\cf7 0\cf6 , -\cf7 1\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf5 const\cf6  \cf5 long\cf6  \cf5 long\cf6  \cf5 int\cf6  INF = \cf7 1e9\cf6 ;
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf2 #define double long double
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 struct\cf6  Point\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 long\cf6  \cf5 long\cf6  \cf5 int\cf6  x, y;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     Point(\cf5 long\cf6  \cf5 long\cf6  \cf5 int\cf6  x0 = \cf7 0\cf6 , \cf5 long\cf6  \cf5 long\cf6  \cf5 int\cf6  y0 = \cf7 0\cf6 ) : x(x0), y(y0) \{\};
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \};
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf6 Point first = Point(INF, INF);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 Point Q;
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 struct\cf6  Vector\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 long\cf6  \cf5 long\cf6  \cf5 int\cf6  x, y;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     Vector(\cf5 long\cf6  \cf5 long\cf6  \cf5 int\cf6  x0 = \cf7 0\cf6 , \cf5 long\cf6  \cf5 long\cf6  \cf5 int\cf6  y0 = \cf7 0\cf6 )\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 this\cf6 ->x = x0;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 this\cf6 ->y = y0;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \};
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     Vector(\cf5 const\cf6  Point & A, \cf5 const\cf6  Point & B)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 this\cf6 ->x = B.x - A.x;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 this\cf6 ->y = B.y - A.y;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     Vector(\cf5 const\cf6  Point & A)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 this\cf6 ->x = A.x;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 this\cf6 ->y = A.y;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 long\cf6  \cf5 long\cf6  \cf5 int\cf6  len2()\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 return\cf6  x * x + y * y;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \};
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf6 Vector \cf5 operator\cf6  + (Vector A, Vector B)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 return\cf6  Vector(A.x + B.x, A.y + B.y);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf6 istream & \cf5 operator\cf6  >> (istream & in, Point & P)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 return\cf6  in >> P.x >> P.y;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf6 ostream & \cf5 operator\cf6  << (ostream & out, Point P)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 return\cf6  out << P.x << \cf4 " "\cf6  << P.y << endl;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 bool\cf6  \cf5 operator\cf6  == (\cf5 const\cf6  Point & A, \cf5 const\cf6  Point & B)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 return\cf6  (A.x == B.x && A.y == B.y);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 long\cf6  \cf5 long\cf6  \cf5 int\cf6  dot_product(\cf5 const\cf6  Vector & A, \cf5 const\cf6  Vector & B)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 return\cf6  A.x * B.x + A.y * B.y;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 long\cf6  \cf5 long\cf6  \cf5 int\cf6  cross_product(\cf5 const\cf6  Vector & A, \cf5 const\cf6  Vector & B)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 return\cf6  A.x * B.y - A.y * B.x;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 bool\cf6  cmp(\cf5 const\cf6  Point & A, \cf5 const\cf6  Point & B)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     Vector OA(first, A), OB(first, B);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 return\cf6  cross_product(OA, OB) > \cf7 0\cf6  || (cross_product(OA, OB) == \cf7 0\cf6  && OA.len2() < OB.len2());
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 bool\cf6  is_right_turn(Point & a, Point & b, Point & c) \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     Vector AB(a, b), BC(b, c);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 return\cf6  cross_product(AB, BC) <= \cf7 0\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 void\cf6  getConvex(vector<Point> & Points, vector<Point> & st)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 int\cf6  ind = \cf7 0\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 int\cf6  n = (\cf5 int\cf6 )Points.size();
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 for\cf6  (\cf5 int\cf6  i = \cf7 0\cf6 ; i < n; i++)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 if\cf6  (Points[i].y < first.y)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             first = Points[i];
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             ind = i;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \}\cf5 else\cf6  \cf5 if\cf6  (Points[i].y == first.y && Points[i].x < first.x)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             first = Points[i];
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             ind = i;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     swap(Points[ind], Points[\cf7 0\cf6 ]);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     sort(Points.begin() + \cf7 1\cf6 , Points.end(), cmp);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     st.push_back(first);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 for\cf6  (\cf5 int\cf6  i = \cf7 1\cf6 ; i < n; i++)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 if\cf6  (st.back() == Points[i])\cf5 continue\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 while\cf6  (st.size() >= \cf7 2\cf6  && (is_right_turn(st[st.size() - \cf7 2\cf6 ], st.back(), Points[i])))\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             st.pop_back();
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         st.push_back(Points[i]);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 bool\cf6  cmp2(\cf5 const\cf6  Point & A, \cf5 const\cf6  Point & B)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     Vector f(first, A);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     Vector s(first, B);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     Vector o(first, Q);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 return\cf6  cross_product(f, o) > cross_product(s, o);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 bool\cf6  onSegment(\cf5 const\cf6  Point & A, \cf5 const\cf6  Point & B)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     Vector AB(A, B);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     Vector BA(B, A);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     Vector AQ(A, Q);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     Vector BQ(B, Q);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 return\cf6  cross_product(AB, AQ) == \cf7 0\cf6  && dot_product(AB, AQ) >= \cf7 0\cf6  && dot_product(BA, BQ) >= \cf7 0\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 bool\cf6  in(vector<Point> & convex)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 int\cf6  ind1 = (\cf5 int\cf6 )(lower_bound(convex.begin() + \cf7 1\cf6 , convex.end(), Q, cmp2) - convex.begin());
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 int\cf6  ind2 = ind1 - \cf7 1\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 if\cf6  (ind1 == convex.size())\cf5 return\cf6  onSegment(convex[\cf7 0\cf6 ], convex.back());
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 else\cf6  \cf5 if\cf6  (ind1 == \cf7 1\cf6 )\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 return\cf6  onSegment(convex[\cf7 0\cf6 ], convex[\cf7 1\cf6 ]);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}\cf5 else\cf6 \{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         Vector Q1(Q, convex[ind1]);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         Vector Q2(Q, convex[ind2]);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         Vector Qf(Q, first);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         Vector f1(first, convex[ind1]);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         Vector f2(first, convex[ind2]);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 int\cf6  s1 = (\cf5 int\cf6 )abs(cross_product(f1, f2));
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 int\cf6  s2 = (\cf5 int\cf6 )(abs(cross_product(Q1, Q2)) + abs(cross_product(Q2, Qf)) + abs(cross_product(Qf, Q1)));
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 bool\cf6  ans = (s1 == s2);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 return\cf6  (ans || onSegment(convex[ind2], convex[ind1]));
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 signed\cf6  main()\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 int\cf6  n, m, k; cin >> n >> m >> k;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     vector<Point> Points(n), convex;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 for\cf6  (\cf5 int\cf6  i = \cf7 0\cf6 ; i < n; i++)cin >> Points[i];
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     getConvex(Points, convex);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 for\cf6  (\cf5 int\cf6  i = \cf7 0\cf6 ; i < m; i++)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         cin >> Q;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         k -= in(convex);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 if\cf6  (k <= \cf7 0\cf6 )cout << \cf4 "YES"\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 else\cf6  cout << \cf4 "NO"\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 return\cf6  \cf7 0\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+}

@@ -1,0 +1,163 @@
+{\rtf1\ansi\ansicpg1251\cocoartf1561\cocoasubrtf600
+{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;\f1\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;\red100\green56\blue32;\red255\green255\blue255;\red196\green26\blue22;
+\red170\green13\blue145;\red0\green0\blue0;\red92\green38\blue153;\red28\green0\blue207;\red63\green110\blue116;
+\red46\green13\blue110;\red38\green71\blue75;}
+{\*\expandedcolortbl;;\csgenericrgb\c39100\c22000\c12500;\csgray\c100000;\csgenericrgb\c77000\c10200\c8600;
+\csgenericrgb\c66500\c5200\c56900;\csgenericrgb\c0\c0\c0;\csgenericrgb\c35900\c14900\c60100;\csgenericrgb\c11000\c0\c81000;\csgenericrgb\c24700\c43100\c45600;
+\csgenericrgb\c18100\c5200\c43100;\csgenericrgb\c14900\c27800\c29400;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab543
+\pard\tx543\pardeftab543\pardirnatural\partightenfactor0
+
+\f0\fs22 \cf2 \cb3 #include\cf4 <iostream>
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #include\cf4 <queue>
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #include\cf4 <map>
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #include\cf4 <algorithm>
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf2 #include\cf4 <vector>
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 using\cf6  \cf5 namespace\cf6  \cf7 std\cf6 ;
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 const\cf6  \cf5 int\cf6  INF = \cf8 1e9\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf5 int\cf6  n;
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 int\cf6  d(\cf7 vector\cf6 <\cf7 vector\cf6 <\cf7 pair\cf6 <\cf5 int\cf6 , \cf5 int\cf6 >>> & g, \cf5 int\cf6  start)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf7 vector\cf6 <\cf5 int\cf6 > dist(\cf9 n\cf6 , \cf9 INF\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf7 vector\cf6 <\cf5 bool\cf6 > used(\cf9 n\cf6 , \cf5 false\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     dist[\cf10 start\cf6 ] = \cf8 0\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 int\cf6  u = start;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 while\cf6  (u != -\cf8 1\cf6 )\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         used[\cf10 u\cf6 ] = \cf5 true\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 for\cf6  (\cf5 auto\cf6  p : g[\cf10 u\cf6 ])\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             \cf5 int\cf6  v = p.\cf7 first\cf6 , w = p.\cf7 second\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             dist[\cf10 v\cf6 ] = \cf10 min\cf6 (dist[\cf10 v\cf6 ], \cf10 max\cf6 (dist[\cf10 u\cf6 ], w));
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 int\cf6  min_dist = \cf9 INF\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         u = -\cf8 1\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 for\cf6  (\cf5 int\cf6  i = \cf8 0\cf6 ; i < \cf9 n\cf6 ; i++)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             \cf5 if\cf6  (!used[\cf10 i\cf6 ] && min_dist > dist[\cf10 i\cf6 ])\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6                 min_dist = dist[\cf10 i\cf6 ];
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6                 u = i;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 return\cf6  *(\cf10 max_element\cf6 (dist.\cf10 begin\cf6 (), dist.\cf10 end\cf6 ()));
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+\
+
+\f0\fs22 \cf5 int\cf6  main()\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf7 ios_base\cf6 ::\cf10 sync_with_stdio\cf6 (\cf8 0\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf7 cin\cf6 .\cf10 tie\cf6 (\cf8 0\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf7 cin\cf6  >> \cf9 n\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf7 vector\cf6 <\cf7 vector\cf6 <\cf7 pair\cf6 <\cf5 int\cf6 , \cf5 int\cf6 >>> g(\cf9 n\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf7 vector\cf6 <\cf7 vector\cf6 <\cf7 pair\cf6 <\cf5 int\cf6 , \cf5 int\cf6 >>> gr(\cf9 n\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 for\cf6  (\cf5 int\cf6  i = \cf8 0\cf6 ; i < \cf9 n\cf6 ; i++)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \cf5 for\cf6  (\cf5 int\cf6  j = \cf8 0\cf6 ; j < \cf9 n\cf6 ; j++)\{
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             \cf5 int\cf6  a;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             \cf7 cin\cf6  >> a;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             g[\cf10 i\cf6 ].\cf10 push_back\cf6 (\{j, a\});
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6             gr[\cf10 j\cf6 ].\cf10 push_back\cf6 (\{i, a\});
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6         \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \}
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 int\cf6  d1 = \cf11 d\cf6 (g, \cf8 0\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 int\cf6  d2 = \cf11 d\cf6 (gr, \cf8 0\cf6 );
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf7 cout\cf6  << \cf10 max\cf6 (d1, d2);
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6     \cf5 return\cf6  \cf8 0\cf6 ;
+\f1\fs24 \cf0 \
+
+\f0\fs22 \cf6 \}
+\f1\fs24 \cf0 \
+}
