@@ -1,64 +1,142 @@
-vector<vector<int>> w, f, c;
+#include<iostream>
+#include<cmath>
+#include<algorithm>
+#include<vector>
+#include<map>
+#include<unordered_set>
+#include<unordered_map>
+#include<map>
+#include<set>
+#include<random>
+#include<algorithm>
+#include<queue>
+#include<stack>
+#include<deque>
+#include<bitset>
+#include<cstdio>
+#include<cassert>
+#include<sstream>
+#include<set>
+#include<list>
+
+#define int long long int
+
+using namespace std;
 
 struct edge {
-    int a, b, w;
-    edge(int a = 0, int b = 0, int w = 0) : a(a), b(b), w(w) {}
+    int a, b, cap, cost, flow, id_back;
+    edge(int a = 0, int b = 0, int cap = 0, int cost = 0, int flow = 0, int id_back = 0) {
+        this->a = a;
+        this->b = b;
+        this->cap = cap;
+        this->cost = cost;
+        this->flow = flow;
+        this->id_back = id_back;
+    }
 };
 
-vector<edge> build() {
-    vector<edge> ans;
-    for (int i = 0; i < 2 * k + 2; ++i) {
-        for (int j = 0; j < 2 * k + 2; ++j) {
-            if (i == j) continue;
-            int c0 = c[i][j] - f[i][j];
-            if (c0 > 0) ans.push_back({i, j, w[i][j]});
-        }
-    }
-    return ans;
-}
+int n, m, k;
+vector<edge> edge;
+vector<vector<int>> indReal;
+
+void addEdge(int a, int b, int cap, int cost) {
+    int sz = edge.size();
+    indReal.back().push_back(sz);
+    edge.emplace_back(a, b, cap, cost, 0, sz + 1);
+    edge.emplace_back(b, a, 0, -cost, 0, sz);
+};
 
 const int INF = 1e15;
 
-vector<int> getPath(int st, const vector<edge>& edges) {
-    vector<int> d(2 * k + 2, INF); d[st] = 0;
-    vector<int> p(2 * k + 2, -1);
-    for (int w = 0; w < 2 * k + 2; ++w) {
-        bool has_path = false;
-        for (const auto& e : edges) {
-            if (d[e.a] < INF) {
-                if (d[e.b] > d[e.a] + e.w) {
-                    d[e.b] = d[e.a] + e.w;
-                    p[e.b] = e.a;
-                    has_path = true;
-                }
+vector<int> getPath(int st, int fn) {
+    vector<int> d(n, INF); d[st] = 0;
+    vector<pair<int, int>> pr(n, {-1, -1});
+    for (int r = 0; r < n; ++r) {
+        for (int id = 0; id < edge.size(); ++id) {
+            const auto& e = edge[id];
+            int a = e.a, b = e.b, canPush = e.cap - e.flow, cost = e.cost;
+            if (canPush > 0 && d[b] > d[a] + cost) {
+                d[b] = d[a] + cost;
+                pr[b] = {a, id};
             }
         }
-        if (!has_path) break;
     }
-    
-    if (d[2 * k + 1] == INF) return {};
+    if (d[fn] > 1e14) return {};
     else {
         vector<int> path;
-        for (int cur = 2 * k + 1; cur != -1; cur = p[cur]) path.push_back (cur);
-        reverse (path.begin(), path.end());
+        while (fn != -1) {
+            if (pr[fn].second > -1) path.push_back(pr[fn].second);
+            fn = pr[fn].first;
+        }
+        reverse(path.begin(), path.end());
         return path;
     }
 }
 
 bool pushFlow(const vector<int>& path) {
     if (path.empty()) return 0;
-    int sz = path.size();
-    for (int i = 1; i < sz; ++i) {
-        ++f[path[i - 1]][path[i]];
-        --f[path[i]][path[i - 1]];
+    for (auto id : path) {
+        ++edge[id].flow;
+        --edge[edge[id].id_back].flow;
     }
     return 1;
 }
 
-void minCostMaxFlow() {
-    while (true) {
-        auto edges = build();
-        auto path = getPath(0, edges);
-        if (!pushFlow(path)) return;
+int minCostMaxFlow(int k) {
+    int flow = 0;
+    for (int i = 0; i < k; ++i) {
+        auto path = getPath(0, n - 1);
+        if (!pushFlow(path)) break;
+        else ++flow;
     }
+    return flow;
+}
+
+vector<vector<pair<int, int>>> g;
+vector<vector<int>> ans;
+
+void dfs(int v, vector<int>& path) {
+    if (!g[v].empty()) {
+        path.push_back(g[v].back().second);
+        dfs(g[v].back().first, path);
+        g[v].pop_back();
+    }
+}
+
+signed main() {
+    cin >> n >> m >> k;
+    for (int i = 0; i < m; ++i) {
+        int a, b, w; cin >> a >> b >> w; --a; --b;
+        indReal.push_back({});
+        addEdge(a, b, 1, w);
+        addEdge(b, a, 1, w);
+    }
+    int flow = minCostMaxFlow(k);
+    if (flow < k) {
+        cout << -1 << "\n";
+        return 0;
+    }
+    int sumCost = 0;
+    g.resize(n);
+    for (int i = 0; i < m; ++i) {
+        for (auto id : indReal[i]) {
+            if (edge[id].flow > 0) {
+                sumCost += edge[id].flow * edge[id].cost;
+                g[edge[id].a].push_back({edge[id].b, i});
+            }
+        }
+    }
+    while (!g[0].empty()) {
+        vector<int> path;
+        dfs(0, path);
+        ans.push_back(path);
+    }
+    cout.precision(20);
+    cout << 1.0 * sumCost / k << "\n";
+    for (const auto& i : ans) {
+        cout << i.size() << " ";
+        for (auto j : i) cout << j + 1 << " ";
+        cout << "\n";
+    }
+    return 0;
 }
